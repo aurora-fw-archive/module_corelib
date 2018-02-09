@@ -68,6 +68,8 @@ typedef bool afwbool_t;
 #include <AuroraFW/STDL/LibC/STDInt.h>
 
 #define AFW_NULL NULL
+#define AFW_NULLPTR nullptr
+#define AFW_NULLVAL 0
 
 typedef unsigned int uint_t;
 typedef unsigned int uint;
