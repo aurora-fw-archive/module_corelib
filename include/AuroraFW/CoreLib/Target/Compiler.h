@@ -176,4 +176,7 @@
 	#endif
 #endif
 
+//Temporary definitions
+#define AFW_CONSTEXPR constexpr
+
 #endif // AURORAFW_CORELIB_TARGET_COMPILER_H
