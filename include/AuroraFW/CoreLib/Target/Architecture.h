@@ -37,6 +37,11 @@
 #ifndef AURORAFW_CORELIB_TARGET_ARCHITECTURE_H
 #define AURORAFW_CORELIB_TARGET_ARCHITECTURE_H
 
+#include <AuroraFW/CoreLib/Target/Compiler.h>
+#if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
+	#pragma once
+#endif
+
 //Define ix86 processor architecture detection
 #if defined(__i386) || defined(__i386__) || defined(_M_IX86)
 	//Define x86 processor wordsize

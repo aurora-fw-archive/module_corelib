@@ -21,7 +21,10 @@
 #ifndef AURORAFW_CORELIB_TARGET_SYSTEM_H
 #define AURORAFW_CORELIB_TARGET_SYSTEM_H
 
-#include <AuroraFW/CoreLib/Target/System.h>
+#include <AuroraFW/CoreLib/Target/Compiler.h>
+#if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
+	#pragma once
+#endif
 
 #if defined(__linux__) || defined(__linux) || defined(linux)
 	#define AFW_TARGET_KERNEL_LINUX

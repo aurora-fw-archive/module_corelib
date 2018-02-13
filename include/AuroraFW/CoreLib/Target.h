@@ -19,10 +19,14 @@
 #ifndef AURORAFW_CORELIB_TARGET_H
 #define AURORAFW_CORELIB_TARGET_H
 
-// CPU Architecture Targets
-#include <AuroraFW/CoreLib/Target/Architecture.h>
 // Compiler Targets (Include detection and version)
 #include <AuroraFW/CoreLib/Target/Compiler.h>
+#if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
+	#pragma once
+#endif
+
+// CPU Architecture Targets
+#include <AuroraFW/CoreLib/Target/Architecture.h>
 // Operation System, Platform, Kernel and Environment Detection
 #include <AuroraFW/CoreLib/Target/System.h>
 

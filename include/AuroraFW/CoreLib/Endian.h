@@ -19,6 +19,11 @@
 #ifndef AURORAFW_CORELIB_ENDIAN_H
 #define AURORAFW_CORELIB_ENDIAN_H
 
+#include <AuroraFW/Global.h>
+#if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
+	#pragma once
+#endif
+
 #include <AuroraFW/CoreLib/Endian.h>
 
 #if defined(AFW_TARGET_KERNEL_LINUX) || defined(AFW_TARGET_CYGWIN)

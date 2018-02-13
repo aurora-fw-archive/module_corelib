@@ -19,6 +19,11 @@
 #ifndef AURORAFW_STDL_CIRCULARSHIFT_H
 #define AURORAFW_STDL_CIRCULARSHIFT_H
 
+#include <AuroraFW/Global.h>
+#if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
+	#pragma once
+#endif
+
 #include <AuroraFW/STDL/LibC/STDDef.h>
 #include <AuroraFW/STDL/LibC/STDInt.h>
 #include <AuroraFW/CoreLib/Target/Compiler.h>
