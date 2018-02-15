@@ -71,10 +71,22 @@
 	#ifdef __INTEL_COMPILER
 		#define AFW_TARGET_COMPILER_INTEL __INTEL_COMPILER
 	#endif
-	
+
 	#ifdef AFW_TARGET_CXX
 		#define AFW_DECL_NOTHROW throw()
 		#endif
+#endif
+
+#ifdef __GNUC__
+	#define AFW_DECL_UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
+#else
+	#define AFW_DECL_UNUSED(x) UNUSED_ ## x
+#endif
+
+#ifdef __GNUC__
+	#define AFW_DECL_UNUSED_FUNCTION(x) __attribute__((__unused__)) UNUSED_ ## x
+#else
+	#define AFW_DECL_UNUSED_FUNCTION(x) UNUSED_ ## x
 #endif
 
 #if defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
