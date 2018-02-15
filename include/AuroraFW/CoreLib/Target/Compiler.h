@@ -57,6 +57,10 @@
 	//Compiler specifications
 	#define AFW_FUNC_INFO __FUNCSIG__
 	#define AFW_DECL_DEPRECATED __declspec(deprecated)
+
+	#define AFW_ALIGNED_ALLOC(s,a) _aligned_malloc(s,a)
+	#define AFW_ALIGNED_FREE(x) _aligned_free(x)
+	
 	#ifdef AFW_TARGET_COMPILER_CLANG
 		#define AFW_DECL_DEPRECATED_X(x) __declspec(deprecated(x))
 	#endif
@@ -103,6 +107,11 @@
 	#endif
 	#define AFW_TARGET_COMPILER_GNU_CC
 	#define AFW_TARGET_COMPILER_GNU_GCC
+#endif
+
+#ifdef AFW_TARGET_COMPILER_GNU
+	#define AFW_ALIGNED_ALLOC(s,a) aligned_alloc(a,s)
+	#define AFW_ALIGNED_FREE(x) ::free(((void**)x)[-1]);
 #endif
 
 #if defined(__BORLANDC__) || defined(__CODEGEARC__)
@@ -186,6 +195,24 @@
 	#if __STRICT_ANSI__ == 1
 		#define AFW_TARGET_STRICT_ANSI
 	#endif
+#endif
+
+//Temporary definitions
+#define AFW_CONSTEXPR constexpr
+#define AFW_NOEXCEPT noexcept
+
+#ifdef AFW_TARGET_COMPILER_GNU
+	#define AFW_DEBUGBREAK(x) __builtin_trap();
+#elif defined(AFW_TARGET_COMPILER_MICROSOFT)
+	#define AFW_DEBUGBREAK(x) __debugbreak();
+#else
+	//#include <AuroraFW/STDL/LibC/Signal.h>
+	#include<signal.h>
+	#define AFW_DEBUGBREAK(x) raise(SIGTRAP);
+#endif
+
+#if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
+	#pragma once
 #endif
 
 #endif // AURORAFW_CORELIB_TARGET_COMPILER_H

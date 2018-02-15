@@ -19,9 +19,15 @@
 #ifndef AURORAFW_CORELIB_STRING_H
 #define AURORAFW_CORELIB_STRING_H
 
+#include <AuroraFW/Global.h>
+#if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
+	#pragma once
+#endif
+
+#include <AuroraFW/Internal/Config.h>
+
 #include <AuroraFW/STDL/LibC/String.h>
 #include <AuroraFW/STDL/LibC/WChar.h>
-#include <AuroraFW/STDL/Memory.h>
 
 #define AFW_STRING_MAX_INPUT_SIZE 8192
 
@@ -48,7 +54,7 @@
 namespace AuroraFW
 {
 	template<class charT>
-	class string
+	class AFW_API string
 	{
 	public:
 		string(); //Blank string

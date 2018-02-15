@@ -16,68 +16,49 @@
 ** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
 ****************************************************************************/
 
-//TODO: Need to be documented and structured
+#ifndef AURORAFW_CORELIB_CALLBACK_H
+#define AURORAFW_CORELIB_CALLBACK_H
 
-#ifndef AURORAFW_TLIB_TYPE_H
-#define AURORAFW_TLIB_TYPE_H
-
-#include <AuroraFW/CoreLib/Target/Compiler.h>
+#include <AuroraFW/Global.h>
 #if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
 	#pragma once
 #endif
 
-#include <AuroraFW/STDL/LibC/Math.h>
-#include <AuroraFW/STDL/LibC/STDDef.h>
+#include <AuroraFW/Internal/Config.h>
 
-#define AFW_DONTCARE -1
+#include <AuroraFW/CoreLib/TypeTraits.h>
 
-typedef void afwslot;
-typedef afwslot* afwcallb;
+//#include <type_traits>
+#include <functional>
 
-//Floating-point types
-#include <AuroraFW/STDL/LibC/Float.h>
+namespace AuroraFW {
+	template<typename T, size_t n, typename CallerType>
+	struct Callback;
 
-#define AFW_NAN NAN
+	template<typename Ret, typename ... Params, size_t n,typename CallerType>
+	struct AFW_API Callback<Ret(Params...), n,CallerType>
+	{
+		typedef Ret (*ret_cb)(Params...);
+		
+		template<typename ... Args>
+		static Ret callback(Args ... args)
+		{
+			func(args...);
+		}
 
-typedef long double real_t;
-typedef unsigned char uchar_t;
-typedef uchar_t byte_t;
+		static ret_cb getCallback(std::function<Ret(Params...)> fn)
+		{
+			func = fn;
+			return static_cast<ret_cb>(Callback<Ret(Params...), n,CallerType>::callback);
+		}
 
-//Boolean types
-#include <AuroraFW/STDL/LibC/STDBool.h>
+		static std::function<Ret(Params...)> func;
+	};
 
-//Integer types
-#include <AuroraFW/STDL/LibC/STDInt.h>
+	template<typename Ret, typename ... Params, size_t n,typename CallerType>
+	std::function<Ret(Params...)> Callback<Ret(Params...), n,CallerType>::func;
+}
 
-#define AFW_NULL NULL
-#define AFW_NULLPTR nullptr
-#define AFW_NULLVAL 0
+#define AFW_CALLBACK(ptype,ctype) AuroraFW::Callback<AuroraFW::ActualType<ptype>::type,__COUNTER__,ctype>::getCallback
 
-typedef unsigned int uint_t;
-typedef unsigned int uint;
-
-typedef unsigned short int ushort;
-
-#ifdef AFW_TARGET_PLATFORM_WINDOWS
-typedef __int8 int8;
-typedef __int16 int16;
-typedef __int32 int32;
-typedef __int64 int64;
-
-typedef int8 int8_t;
-typedef int16 int16_t;
-typedef int32 int32_t;
-typedef int64 int64_t;
-
-typedef unsigned __int8 uint8;
-typedef unsigned __int16 uint16;
-typedef unsigned __int32 uint32;
-typedef unsigned __int64 uint64;
-
-typedef uint8 uint8_t;
-typedef uint16 uint16_t;
-typedef uint32 uint32_t;
-typedef uint64 uint64_t;
-#endif
-
-#endif // AURORAFW_TLIB_TYPE_H
+#endif // AURORAFW_CORELIB_CALLBACK_H
