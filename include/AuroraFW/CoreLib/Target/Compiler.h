@@ -60,7 +60,7 @@
 
 	#define AFW_ALIGNED_ALLOC(s,a) _aligned_malloc(s,a)
 	#define AFW_ALIGNED_FREE(x) _aligned_free(x)
-	
+
 	#ifdef AFW_TARGET_COMPILER_CLANG
 		#define AFW_DECL_DEPRECATED_X(x) __declspec(deprecated(x))
 	#endif
@@ -111,7 +111,7 @@
 
 #ifdef AFW_TARGET_COMPILER_GNU
 	#define AFW_ALIGNED_ALLOC(s,a) aligned_alloc(a,s)
-	#define AFW_ALIGNED_FREE(x) ::free(((void**)x)[-1]);
+	#define AFW_ALIGNED_FREE(x) ::free(x);
 #endif
 
 #if defined(__BORLANDC__) || defined(__CODEGEARC__)
