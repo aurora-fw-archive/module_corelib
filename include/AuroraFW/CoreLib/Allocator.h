@@ -27,6 +27,8 @@
 #include <AuroraFW/Internal/Config.h>
 
 #include <AuroraFW/CoreLib/MemoryManager.h>
+#include <new>
+#include <assert.h>
 
 namespace AuroraFW {
 	class AFW_API MemoryAllocator {
@@ -42,8 +44,16 @@ namespace AuroraFW {
 
 		inline void free(void* block) { free(block, _stats); }
 		inline void free(void* block, size_t size) { free(block, size, _stats); }
+		inline void free(void* block, const char* file, uint line) { free(block, _stats, file, line); }
+		inline void free(void* block, size_t size, const char* file, uint line) { free(block, size, _stats, file, line); }
 		static void free(void* , MemoryStats& );
 		static void free(void* , size_t , MemoryStats& );
+		#ifdef AFW__VERBOSE
+			static void free(void *block, MemoryStats &stats, const char *, uint);
+		#else
+			inline static void free(void *block, MemoryStats &stats, const char *, uint) { return free(block, stats); }
+		#endif
+		static void free(void *block, size_t size, MemoryStats &stats, const char *, uint);
 
 		inline MemoryStats getMemoryStats() const { return _stats; }
 
@@ -52,31 +62,32 @@ namespace AuroraFW {
 	};
 }
 
-#ifdef AFW__DEBUG
+#if defined(AFW__DEBUG)
 #define AFW_NEW new(__FILE__, __LINE__)
+#define AFW_DELETE delete(__FILE__, __LINE__)
 #else
 #define AFW_NEW new
-#endif
 #define AFW_DELETE delete
-
-inline void* operator new(size_t size)
-{
-	return AuroraFW::MemoryAllocator::allocate(size, AuroraFW::MemoryManager::getMemoryStats());
-}
+#endif
 
 inline void* operator new(size_t size, const char* file, uint line)
 {
 	return AuroraFW::MemoryAllocator::allocate(size, AuroraFW::MemoryManager::getMemoryStats(), file, line);
 }
 
-inline void* operator new[](size_t size)
+inline void* operator new[](size_t size, const char* file, uint line)
+{
+	return AuroraFW::MemoryAllocator::allocate(size, AuroraFW::MemoryManager::getMemoryStats(), file, line);
+}
+
+inline void* operator new(size_t size)
 {
 	return AuroraFW::MemoryAllocator::allocate(size, AuroraFW::MemoryManager::getMemoryStats());
 }
 
-inline void* operator new[](size_t size, const char* file, uint line)
+inline void* operator new[](size_t size)
 {
-	return AuroraFW::MemoryAllocator::allocate(size, AuroraFW::MemoryManager::getMemoryStats(), file, line);
+	return AuroraFW::MemoryAllocator::allocate(size, AuroraFW::MemoryManager::getMemoryStats());
 }
 
 inline void operator delete(void* block) AFW_NOEXCEPT
@@ -89,14 +100,14 @@ inline void operator delete[](void* block) AFW_NOEXCEPT
 	AuroraFW::MemoryAllocator::free(block, AuroraFW::MemoryManager::getMemoryStats());
 }
 
-inline void operator delete(void* block, size_t size) AFW_NOEXCEPT
+inline void operator delete(void* block, size_t) AFW_NOEXCEPT
 {
-	AuroraFW::MemoryAllocator::free(block, size, AuroraFW::MemoryManager::getMemoryStats());
+	AuroraFW::MemoryAllocator::free(block, AuroraFW::MemoryManager::getMemoryStats());
 }
 
-inline void operator delete[](void* block, size_t size) AFW_NOEXCEPT
+inline void operator delete[](void* block, size_t) AFW_NOEXCEPT
 {
-	AuroraFW::MemoryAllocator::free(block, size, AuroraFW::MemoryManager::getMemoryStats());
+	AuroraFW::MemoryAllocator::free(block, AuroraFW::MemoryManager::getMemoryStats());
 }
 
 #endif // AURORAFW_CORELIB_ALLOCATOR_H

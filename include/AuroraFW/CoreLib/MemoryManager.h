@@ -45,6 +45,18 @@ namespace AuroraFW {
 	public:
 		inline static MemoryStats& getMemoryStats() { return memStats; }
 	};
+
+	//struct AFW_API MemoryNode {
+	//	int _ID
+	//};
+
+
+	class AFW_API MemoryLeakTracker {
+	public:
+		MemoryLeakTracker(const char* path, int line) : _path(path), _line(line) {}
+		const char* _path;
+		const int _line;
+	};
 }
 
 #endif // AURORAFW_CORELIB_MEMORY_H
