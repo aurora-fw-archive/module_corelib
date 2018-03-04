@@ -62,7 +62,7 @@ namespace AuroraFW {
 	};
 }
 
-#if defined(AFW__DEBUG)
+#if defined(AFW__DEBUG) && defined(AFW__CUSTOM_ALLOCATOR)
 #define AFW_NEW new(__FILE__, __LINE__)
 #define AFW_DELETE delete(__FILE__, __LINE__)
 #else
@@ -70,6 +70,7 @@ namespace AuroraFW {
 #define AFW_DELETE delete
 #endif
 
+#if AFW__CUSTOM_ALLOCATOR
 inline void* operator new(size_t size, const char* file, uint line)
 {
 	return AuroraFW::MemoryAllocator::allocate(size, AuroraFW::MemoryManager::getMemoryStats(), file, line);
@@ -109,5 +110,6 @@ inline void operator delete[](void* block, size_t) AFW_NOEXCEPT
 {
 	AuroraFW::MemoryAllocator::free(block, AuroraFW::MemoryManager::getMemoryStats());
 }
+#endif
 
 #endif // AURORAFW_CORELIB_ALLOCATOR_H

@@ -70,17 +70,21 @@ namespace AuroraFW {
 	void MemoryAllocator::free(void* block, MemoryStats &stats)
 	{
 		if(block == AFW_NULLPTR)
+#ifdef AFW__VERBOSE
+			std::cerr << "=##=\tinvalid pointer (0x0)" << std::endl;
+#else
 			return;
+#endif
 		byte_t *mem = (byte_t *)block - sizeof(size_t);
 		size_t size = *(size_t *)mem;
 		stats.remove(size);
-		#ifdef AFW__VERBOSE
-			std::cout << "=!!=\tDelete a block of memory with size=" << size << std::endl
-				<< "=!!=\tTotal memory Allocated: " << stats.totalAllocated << std::endl
-				<< "=!!=\tTotal memory freed: " << stats.totalFreed << std::endl
-				<< "=!!=\tMemory currently used: " << stats.currentUsed << std::endl
-				<< "=!!=\tTotal allocation: " << stats.totalAllocations << "\n" << std::endl;
-		#endif
+#ifdef AFW__VERBOSE
+		std::cout << "=!!=\tDelete a block of memory with size=" << size << std::endl
+			<< "=!!=\tTotal memory Allocated: " << stats.totalAllocated << std::endl
+			<< "=!!=\tTotal memory freed: " << stats.totalFreed << std::endl
+			<< "=!!=\tMemory currently used: " << stats.currentUsed << std::endl
+			<< "=!!=\tTotal allocation: " << stats.totalAllocations << "\n" << std::endl;
+#endif
 		AFW_ALIGNED_FREE(mem);
 	}
 
