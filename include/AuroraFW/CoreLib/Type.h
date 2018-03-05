@@ -31,9 +31,6 @@
 
 #define AFW_DONTCARE -1
 
-typedef void afwslot;
-typedef afwslot* afwcallb;
-
 //Floating-point types
 #include <AuroraFW/STDL/LibC/Float.h>
 
