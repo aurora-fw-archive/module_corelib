@@ -26,15 +26,15 @@ file(GLOB_RECURSE AURORAFW_MODULE_CORELIB_HEADERS ${AURORAFW_MODULE_CORELIB_DIR}
 file(GLOB_RECURSE AURORAFW_MODULE_CORELIB_SOURCE ${AURORAFW_MODULE_CORELIB_SOURCE_DIR}/*.*)
 
 add_library (aurorafw-corelib SHARED ${AURORAFW_MODULE_CORELIB_SOURCE})
-aurora_add_library_target(aurorafw-corelib SHARED)
+aurorafw_add_library_target(aurorafw-corelib SHARED)
 
-if(AURORA_PCH)
+if(AURORAFW_PCH)
 	add_precompiled_header(aurorafw-corelib "${AURORAFW_MODULE_CORELIB_HEADERS}")
 endif()
 
 target_link_libraries(aurorafw-corelib aurorafw-stdl-cc)
 
-set_target_properties(aurorafw-corelib PROPERTIES OUTPUT_NAME "aurorafw-corelib_${AURORA_PLATFORM_PREFIX}_${AURORA_CPUARCH_PREFIX}")
+set_target_properties(aurorafw-corelib PROPERTIES OUTPUT_NAME "aurorafw-corelib_${AURORAFW_PLATFORM_PREFIX}_${AURORAFW_CPUARCH_PREFIX}")
 
 install(TARGETS aurorafw-corelib DESTINATION lib)
 
