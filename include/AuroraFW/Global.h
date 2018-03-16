@@ -31,4 +31,9 @@
 #define AURORAFW_
 #endif // AURORAFW_
 
+//TODO: Build System!
+#define AURORAFW_VERSION_MAJOR 0
+#define AURORAFW_VERSION_MINOR 0
+#define AURORAFW_VERSION_REVISION 0
+
 #endif // AURORAFW_GLOBAL_H
