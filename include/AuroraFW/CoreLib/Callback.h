@@ -57,8 +57,14 @@ namespace AuroraFW {
 
 	template<typename Ret, typename ... Params, size_t n,typename CallerType>
 	std::function<Ret(Params...)> Callback<Ret(Params...), n,CallerType>::func;
+
+	template<typename T, typename... U>
+	AFW_FORCE_INLINE auto getCallbackPtr(std::function<T(U...)> f) {
+		return f.template target<T(*)(U...)>();
+	}
 }
 
 #define AFW_CALLBACK(ptype,ctype) AuroraFW::Callback<AuroraFW::ActualType<ptype>::type,__COUNTER__,ctype>::getCallback
+typedef void(*afw_callback_t)();
 
 #endif // AURORAFW_CORELIB_CALLBACK_H
