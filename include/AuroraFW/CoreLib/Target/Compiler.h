@@ -66,6 +66,7 @@
 	#endif
 	#define AFW_DECL_EXPORT __declspec(dllexport)
 	#define AFW_DECL_IMPORT __declspec(dllimport)
+	#define AFW_DEBUGBREAK(x) __debugbreak();
 
 	//Detect pragmaonce support
 	#if _MSC_VER>=1020
@@ -79,39 +80,38 @@
 	#ifdef AFW_TARGET_CXX
 		#define AFW_DECL_NOTHROW throw()
 		#endif
-#endif
-
-#ifdef __GNUC__
-	#define AFW_DECL_UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
-#else
-	#define AFW_DECL_UNUSED(x) UNUSED_ ## x
-#endif
-
-#ifdef __GNUC__
-	#define AFW_DECL_UNUSED_FUNCTION(x) __attribute__((__unused__)) UNUSED_ ## x
-#else
-	#define AFW_DECL_UNUSED_FUNCTION(x) UNUSED_ ## x
-#endif
-
-#if defined(__GNUG__) || (defined(__GNUC__) && defined(__cplusplus))
+#elif defined(__GNUG__) || defined(__GNUC__)
 	#ifndef AFW_TARGET_COMPILER_GNU
 		#define AFW_TARGET_COMPILER_GNU
 	#endif
-	#define AFW_TARGET_COMPILER_GNU_CXX
+	#define AFW_TARGET_COMPILER_GNU_GCC
+	#ifdef AFW_TARGET_CXX
+		#define AFW_TARGET_COMPILER_GNU_CXX
+	#else
+		#define AFW_TARGET_COMPILER_GNU_CC
+	#endif // AFW_TARGET_CXX
+
 	#ifdef __GNUG__
 		#define AFW_TARGET_COMPILER_GNU_GXX
 	#endif
-#elif defined(__GNUC__) && !defined(__cplusplus)
-	#ifndef AFW_TARGET_COMPILER_GNU
-		#define AFW_TARGET_COMPILER_GNU
-	#endif
-	#define AFW_TARGET_COMPILER_GNU_CC
-	#define AFW_TARGET_COMPILER_GNU_GCC
-#endif
 
-#ifdef AFW_TARGET_COMPILER_GNU
+	#define AFW_FORCE_INLINE __always_inline
 	#define AFW_ALIGNED_ALLOC(s,a) aligned_alloc(a,s)
 	#define AFW_ALIGNED_FREE(x) ::free(x);
+	#define AFW_DEBUGBREAK(x) __builtin_trap();
+	#define AFW_DECL_UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
+	#define AFW_DECL_UNUSED_FUNCTION(x) __attribute__((__unused__)) UNUSED_ ## x
+#else
+	#warning "Unknown compiler!"
+
+	#define AFW_DECL_UNUSED(x) UNUSED_ ## x
+	#define AFW_DECL_UNUSED_FUNCTION(x) UNUSED_ ## x
+
+	#define AFW_FORCE_INLINE inline
+
+	//#include <AuroraFW/STDL/LibC/Signal.h>
+	#include<signal.h>
+	#define AFW_DEBUGBREAK(x) raise(SIGTRAP);
 #endif
 
 #if defined(__BORLANDC__) || defined(__CODEGEARC__)
@@ -200,16 +200,6 @@
 //Temporary definitions
 #define AFW_CONSTEXPR constexpr
 #define AFW_NOEXCEPT noexcept
-
-#ifdef AFW_TARGET_COMPILER_GNU
-	#define AFW_DEBUGBREAK(x) __builtin_trap();
-#elif defined(AFW_TARGET_COMPILER_MICROSOFT)
-	#define AFW_DEBUGBREAK(x) __debugbreak();
-#else
-	//#include <AuroraFW/STDL/LibC/Signal.h>
-	#include<signal.h>
-	#define AFW_DEBUGBREAK(x) raise(SIGTRAP);
-#endif
 
 #if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
 	#pragma once

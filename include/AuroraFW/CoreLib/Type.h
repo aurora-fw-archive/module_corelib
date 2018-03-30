@@ -34,7 +34,7 @@
 //Floating-point types
 #include <AuroraFW/STDL/LibC/Float.h>
 
-#define AFW_NAN NAN
+#define AFW_NAN NA
 
 typedef long double real_t;
 typedef unsigned char uchar_t;
@@ -75,6 +75,20 @@ typedef uint8 uint8_t;
 typedef uint16 uint16_t;
 typedef uint32 uint32_t;
 typedef uint64 uint64_t;
+#endif
+
+#if AFW_DOUBLE_PRECISION == 2
+	typedef real_t afw_real;
+#elif AFW_DOUBLE_PRECISION == 1
+	typedef double afw_real;
+#else
+	typedef float afw_real;
+#endif
+
+#ifdef AFW_TARGET_CXX
+	namespace afw {
+		typedef afw_real real;
+	}
 #endif
 
 #endif // AURORAFW_TLIB_TYPE_H
