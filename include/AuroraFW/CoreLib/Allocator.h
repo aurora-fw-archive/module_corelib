@@ -19,7 +19,7 @@
 #ifndef AURORAFW_CORELIB_ALLOCATOR_H
 #define AURORAFW_CORELIB_ALLOCATOR_H
 
-#include <AuroraFW/Global.h>
+#include <AuroraFW/CoreLib/Target/Compiler.h>
 #if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
 	#pragma once
 #endif

@@ -16,7 +16,6 @@
 ** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
 ****************************************************************************/
 
-#include <AuroraFW/CoreLib/Allocator.h>
 #include <AuroraFW/STDL/LibC/Assert.h>
 #include <AuroraFW/STDL/LibC/String.h>
 #include <AuroraFW/Core/DebugManager.h>

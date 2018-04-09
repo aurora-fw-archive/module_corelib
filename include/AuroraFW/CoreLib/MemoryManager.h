@@ -19,12 +19,13 @@
 #ifndef AURORAFW_CORELIB_MEMORY_H
 #define AURORAFW_CORELIB_MEMORY_H
 
-#include <AuroraFW/Global.h>
+#include <AuroraFW/CoreLib/Target/Compiler.h>
 #if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
 	#pragma once
 #endif
 
 #include <AuroraFW/Internal/Config.h>
+#include <AuroraFW/CoreLib/Type.h>
 
 namespace AuroraFW {
 	struct AFW_API MemoryStats

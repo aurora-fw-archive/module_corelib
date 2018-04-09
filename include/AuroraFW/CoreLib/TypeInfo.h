@@ -16,8 +16,8 @@
 ** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
 ****************************************************************************/
 
-#ifndef AURORAFW_CORELIB_TYPETRAITS_H
-#define AURORAFW_CORELIB_TYPETRAITS_H
+#ifndef AURORAFW_CORELIB_TYPEINFO_H
+#define AURORAFW_CORELIB_TYPEINFO_H
 
 #include <AuroraFW/Global.h>
 #if(AFW_TARGET_PRAGMA_ONCE_SUPPORT)
@@ -26,21 +26,63 @@
 
 #include <AuroraFW/Internal/Config.h>
 
-template <class T>
-AFW_CONSTEXPR void _afw_test_constexpr(T&& ) {}
-
-#define AFW_IS_CONSTEXPR(...) AFW_NOEXCEPT(_afw_test_constexpr(__VA_ARGS__))
+#include <AuroraFW/CoreLib/TypeTraits.h>
 
 namespace AuroraFW {
-	template<typename T>
-	struct AFW_API ActualType {
-		typedef T type;
+	enum class TypeID : unsigned
+	{
+		Unsigned,
+		UnsignedInt = Unsigned,
+		UnsignedChar,
+		Byte = UnsignedChar,
+		UnsignedByte = Byte,
+		Float,
+		Double,
+		Real,
+		LongDouble = Real,
+		Int,
+		Int8,
+		Int16,
+		Int32 = Int,
+		Char,
+		Long,
+		LongInt = Long,
+		LongLong,
+		LongLongInt = LongLong,
+		Bool
 	};
 
-	template<typename T>
-	struct AFW_API ActualType<T*> {
-		typedef typename ActualType<T>::type type;
+	class AFW_API TypeInfo {
+		inline static constexpr size_t _sizeOf(TypeID type)
+		{
+			switch (type)
+			{
+				case TypeID::Float: return sizeof(float);
+				case TypeID::UnsignedInt: return sizeof(unsigned int);
+				case TypeID::UnsignedByte: return sizeof(byte_t);
+				case TypeID::Bool: return sizeof(bool);
+				default: return AFW_NULLVAL;
+			}
+		}
+
+	public:
+		AFW_FORCE_INLINE static constexpr size_t sizeOf(unsigned type)
+		{
+			return sizeOf(static_cast<TypeID>(type));
+		}
+
+		AFW_FORCE_INLINE static constexpr size_t sizeOf(TypeID type)
+		{
+			return ((AFW_IS_CONSTEXPR(type)) ? static_sizeOf(type) : _sizeOf(type));
+		}
+
+		AFW_FORCE_INLINE static constexpr size_t static_sizeOf(TypeID type)
+		{
+			static_assert(AFW_IS_CONSTEXPR(type));
+			return _sizeOf(type);
+		}
+		AFW_FORCE_INLINE static constexpr size_t static_sizeOf(unsigned type) { return sizeOf(static_cast<TypeID>(type)); }
 	};
 }
 
-#endif // AURORAFW_CORELIB_TYPETRAITS_H
+#endif // AURORAFW_CORELIB_TYPEINFO_H

@@ -26,6 +26,7 @@
 
 #include <AuroraFW/CoreLib/Type.h>
 #include <AuroraFW/CoreLib/Utils.h>
+#include <AuroraFW/CoreLib/Allocator.h>
 
 #ifndef AURORAFW_
 #define AURORAFW_
