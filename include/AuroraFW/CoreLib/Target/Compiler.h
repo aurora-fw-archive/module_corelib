@@ -95,7 +95,12 @@
 		#define AFW_TARGET_COMPILER_GNU_GXX
 	#endif
 
-	#define AFW_FORCE_INLINE __always_inline
+	#ifdef AFW__DEBUG
+		#define AFW_FORCE_INLINE inline
+	#else
+		#define AFW_FORCE_INLINE __always_inline
+	#endif // AFW__DEBUG
+	
 	#define AFW_ALIGNED_ALLOC(s,a) aligned_alloc(a,s)
 	#define AFW_ALIGNED_FREE(x) ::free(x);
 	#define AFW_DEBUGBREAK(x) __builtin_trap();
